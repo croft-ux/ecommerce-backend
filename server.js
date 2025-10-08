@@ -2,12 +2,24 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise'); // Use the promise-based version for cleaner code
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+// This line uses the PORT provided by the environment (Render),
+// or defaults to 3000 if running locally.
+const PORT = process.env.PORT || 3000; 
 
-// Create a connection pool for MySQL, using the full DATABASE_URL environment variable
-const pool = mysql.createPool(process.env.MYSQL_URL);;
+// In your server.js file:
 
+// Create a connection pool using EXPLICIT environment variables
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT, 
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD, 
+    database: process.env.DB_NAME
+});
+
+// Also, ensure your PORT variable is still correctly used here:
+// const PORT = process.env.PORT || 3000; 
+// app.listen(PORT, ...);
 app.use(cors());
 app.use(express.json());
 
@@ -33,9 +45,9 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// Start the server after connecting to the database
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
+
+
+// Start the server using the dynamic PORT variable
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
