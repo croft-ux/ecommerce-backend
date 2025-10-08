@@ -5,13 +5,8 @@ const mysql = require('mysql2/promise'); // Use the promise-based version for cl
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Create a connection pool for MySQL
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'Ndamzi2007.', // Use your MySQL root password here
-    database: 'ecomm'
-});
+// Create a connection pool for MySQL, using the full DATABASE_URL environment variable
+const pool = mysql.createPool(process.env.DATABASE_URL);
 
 app.use(cors());
 app.use(express.json());
