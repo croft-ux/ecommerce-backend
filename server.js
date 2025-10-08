@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Create a connection pool for MySQL, using the full DATABASE_URL environment variable
-const pool = mysql.createPool(process.env.DATABASE_URL);
+const pool = mysql.createPool(process.env.MYSQL_URL);;
 
 app.use(cors());
 app.use(express.json());
