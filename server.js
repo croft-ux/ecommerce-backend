@@ -1,28 +1,28 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2/promise'); // Use the promise-based version for cleaner code
+const mysql = require('mysql2/promise');
 
-// This line uses the PORT provided by the environment (Render),
-// or defaults to 3000 if running locally.
 const PORT = process.env.PORT || 3000; 
 
-// In your server.js file:
+// --- ADD THIS LINE HERE ---
+const app = express(); 
+// ---------------------------
 
-// Create a connection pool using EXPLICIT environment variables
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT, 
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD, 
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    ssl: {
+        rejectUnauthorized: true // Ensure this is here for TiDB!
+    }
 });
 
-// Also, ensure your PORT variable is still correctly used here:
-// const PORT = process.env.PORT || 3000; 
-// app.listen(PORT, ...);
 app.use(cors());
 app.use(express.json());
 
+// ... (rest of your routes like app.get('/api/products')...)
 // Test the database connection
 const connectDB = async () => {
     try {
